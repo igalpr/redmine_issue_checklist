@@ -3,14 +3,14 @@ class IssueChecklist < ActiveRecord::Base
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   has_one :comment, as: :commented, dependent: :delete
   #attr_accessible :is_done, :subject
-  attr_protected :id
+  #attr_protected :id
 
   validates_presence_of :subject
 
   # after_save :recalc_issue_done_ratio
   private
   def checklist_params
-    params.require(:checklist).permit(:is_done,:subject)
+    params.require(:checklist).permit(:is_done,:subject,:id)
   end
   def editable_by?(usr=User.current)
     usr && (usr.allowed_to?(:edit_checklists, project) || (self.author == usr && usr.allowed_to?(:edit_own_checklists, project)))
